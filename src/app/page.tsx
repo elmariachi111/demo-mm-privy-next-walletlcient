@@ -7,7 +7,8 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <Providers>
-        <h1>Hello World</h1>
+        <h1>privy, wagmi, next</h1>
+        <h2>something broke recently</h2>
         <YourComponent />
       </Providers>
     </div>

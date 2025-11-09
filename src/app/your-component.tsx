@@ -20,7 +20,7 @@ function WagmiTestComponent() {
       <div>Wagmi Test Component:</div>
 
       <div>if theres a wallet client, this is its address: &quot;{wcAddress}&quot; </div>
-
+<div>the default address hook says its: &quot;{address}&quot; </div>
       <button
         onClick={() => {
           signMessage({ message: "Hello, world!" });

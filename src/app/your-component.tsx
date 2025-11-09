@@ -10,7 +10,7 @@ function WagmiTestComponent() {
 
   const wcAddress = useMemo(() => {
     if (walletClient) {
-      walletClient.account.address;
+     return walletClient.account.address;
     }
     return null;
   }, [walletClient]);
@@ -19,7 +19,7 @@ function WagmiTestComponent() {
     <div>
       <div>Wagmi Test Component:</div>
 
-      <div>if theres a wallet client, this is its address: "{wcAddress}" </div>
+      <div>if theres a wallet client, this is its address: &quot;{wcAddress}&quot; </div>
 
       <button
         onClick={() => {

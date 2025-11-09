@@ -4,8 +4,8 @@ import { useAccount, useSignMessage, useWalletClient } from "wagmi";
 
 function WagmiTestComponent() {
   const { address } = useAccount();
-  const { data: walletClient } = useWalletClient();
-const {signMessage} = useSignMessage();
+  const { data: walletClient } = useWalletClient({ account: address });
+  const { signMessage } = useSignMessage();
   console.log(address, walletClient);
 
   const wcAddress = useMemo(() => {
@@ -15,12 +15,21 @@ const {signMessage} = useSignMessage();
     return null;
   }, [walletClient]);
 
-  return <div>Wagmi Test Component: {wcAddress}
-  
-  <button onClick={() => {
-    signMessage({message: "Hello, world!"})
-  }}>Sign Message</button>
-  </div>;
+  return (
+    <div>
+      <div>Wagmi Test Component:</div>
+
+      <div>if theres a wallet client, this is its address: "{wcAddress}" </div>
+
+      <button
+        onClick={() => {
+          signMessage({ message: "Hello, world!" });
+        }}
+      >
+        Sign Message
+      </button>
+    </div>
+  );
 }
 
 export default function YourComponent() {
@@ -34,10 +43,13 @@ export default function YourComponent() {
   return (
     <div>
       Privy is ready!
-      <button onClick={() => {
-        connectWallet()
-      }}>Connect Wallet</button>
-
+      <button
+        onClick={() => {
+          connectWallet();
+        }}
+      >
+        Connect Wallet
+      </button>
       <button
         onClick={() => {
           //connectWallet()

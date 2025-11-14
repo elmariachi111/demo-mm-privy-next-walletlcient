@@ -1,6 +1,11 @@
-import { usePrivy } from "@privy-io/react-auth";
 import { useMemo } from "react";
-import { useAccount, useSignMessage, useWalletClient } from "wagmi";
+import {
+  useAccount,
+  useConnect,
+  useDisconnect,
+  useSignMessage,
+  useWalletClient,
+} from "wagmi";
 
 function WagmiTestComponent() {
   const { address } = useAccount();
@@ -10,7 +15,7 @@ function WagmiTestComponent() {
 
   const wcAddress = useMemo(() => {
     if (walletClient) {
-     return walletClient.account.address;
+      return walletClient.account.address;
     }
     return null;
   }, [walletClient]);
@@ -19,8 +24,10 @@ function WagmiTestComponent() {
     <div>
       <div>Wagmi Test Component:</div>
 
-      <div>if theres a wallet client, this is its address: &quot;{wcAddress}&quot; </div>
-<div>the default address hook says its: &quot;{address}&quot; </div>
+      <div>
+        if theres a wallet client, this is its address: &quot;{wcAddress}&quot;{" "}
+      </div>
+      <div>the default address hook says its: &quot;{address}&quot; </div>
       <button
         onClick={() => {
           signMessage({ message: "Hello, world!" });
@@ -33,39 +40,33 @@ function WagmiTestComponent() {
 }
 
 export default function YourComponent() {
-  const { ready, login, logout, connectWallet } = usePrivy();
-
-  if (!ready) {
-    return <div>Loading...</div>;
-  }
-
-  // Now it's safe to use other Privy hooks and state
+  const { isConnected, address } = useAccount();
+  const { connectors, connect } = useConnect();
+  const { disconnect } = useDisconnect();
+  const {data: walletClient} = useWalletClient()
   return (
     <div>
-      Privy is ready!
-      <button
-        onClick={() => {
-          connectWallet();
-        }}
-      >
-        Connect Wallet
-      </button>
-      <button
+      
+      {connectors.map((connector) => (
+        <button key={connector.uid} onClick={() => connect({ connector })}>
+          {connector.name}
+        </button>
+      ))}
+      {/* <button
         onClick={() => {
           //connectWallet()
           login();
         }}
       >
         Login
-      </button>
-      <button
-        onClick={() => {
-          logout();
-        }}
-      >
-        Logout
-      </button>
-      <WagmiTestComponent />
+      </button> */}
+      {isConnected && (
+        <div>
+          <WagmiTestComponent />
+          <button onClick={() => disconnect()}>Disconnect</button>
+        </div>
+      )}
+      {walletClient ? <p>Wallet Client: {walletClient.account.address}</p> : <p>No Wallet Client</p>}
     </div>
   );
 }
